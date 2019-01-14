@@ -1,0 +1,38 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "clean-static-resources",
+      "type": "shell",
+      "command": "rm -rf dist/resources && rm -rf dist/scripts && rm -rf dist/index.html"
+    },
+    {
+      "label": "copy-static-resources",
+      "type": "shell",
+      "command": "cp -R resources dist/resources && cp -R scripts dist/scripts && cp index.html dist/index.html"
+    },
+    {
+      "label": "tsc-compile",
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "problemMatcher": [
+        "$tsc"
+      ]
+    },
+    {
+      "label": "build",
+      "dependsOn": [
+        "clean-static-resources",
+        "copy-static-resources",
+        "tsc-compile"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
