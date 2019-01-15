@@ -1,7 +1,9 @@
 /// <reference path='../typings/phaser.d.ts'/>
 module MyGameModule {
 export class GameplayScene extends Phaser.Scene {
-  private player:Phaser.GameObjects.Sprite;
+  private player:MyGameModule.Player;
+  private cursors:Phaser.Input.Keyboard.CursorKeys;
+
   constructor() {
     super({key: 'GameplayScene'});
   }
@@ -9,7 +11,7 @@ export class GameplayScene extends Phaser.Scene {
   preload() {
     this.load.spritesheet(
       'player', 
-      'resources/player_64.png', 
+      'resources/player_64_noborder.png', 
       {
         frameWidth: 64,
         frameHeight: 64
@@ -17,18 +19,31 @@ export class GameplayScene extends Phaser.Scene {
   } 
 
   create() {
-    let width:number = this.game.canvas.width;
-    let height:number = this.game.canvas.height;
-    this.player = this.add.sprite(width/2, 3 * height / 4, 'player', 0);
+    // Define all the controllers
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    // Define all the animations in the scene.
     this.anims.create({
-      key: "idle",
+      key: 'player-idle',
       frames: [{key:'player', frame:0}]
     });
-    this.player.anims.play('idle');
+    this.anims.create({
+      key: 'player-right',
+      frames: [{key:'player', frame:1}]
+    });
+    this.anims.create({
+      key: 'player-left',
+      frames: [{key:'player', frame:2}]
+    });
+
+    // Instantiate game objects
+    this.player = new Player(this, this.cursors);
+    this.add.existing(this.player);
+    this.player.onCreate();
   }
-
+  
   update() {
-
+    this.player.onUpdate();
   }
 }
 }
